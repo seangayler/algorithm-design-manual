@@ -36,5 +36,18 @@ def print_linked_list(linked_list):
         i += 1
         curr = curr.next
 
+def insert_end_of_list(node, data):
+    if node.next == None:
+        node.next = Node(data)
+        return
+    else:
+        return insert_end_of_list(node.next, data) 
+        
+        
+
 linked_list = create_linked_list([1,2,3])
+print_linked_list(linked_list)
+data = 50
+print(f"Inserting {data} at end of list:")
+insert_end_of_list(linked_list.head, data)
 print_linked_list(linked_list)
