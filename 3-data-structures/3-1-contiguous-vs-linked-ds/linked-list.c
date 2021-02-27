@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <stdio.h>
 
 struct Node {
@@ -6,7 +7,8 @@ struct Node {
 };
 
 void print_linked_list(struct Node*);
-struct Node* search_linked_list(struct Node *node, int data);
+struct Node* search_linked_list(struct Node*, int data);
+void insert_end_of_list(struct Node*, int data);
 
 int main() {
     /* Declare and initialise linked list of size 3 */   
@@ -25,18 +27,29 @@ int main() {
     
     /* Declare and initialise target data to find in linked list */
     int targets[2] = {2, 50};
-    int num_targets = sizeof(targets)/sizeof(targets[0]);
+    int numTargets = sizeof(targets)/sizeof(targets[0]);
     
     /* Search for targets in linked list */
     int i;
-    struct Node *found_target;
-    for (i = 0; i < num_targets; i++) {
-        found_target = search_linked_list(&linkedList1, targets[i]);
-        if (found_target != NULL) {
+    struct Node *foundTarget;
+    for (i = 0; i < numTargets; i++) {
+        foundTarget = search_linked_list(&linkedList1, targets[i]);
+        if (foundTarget != NULL) {
             printf("Target data %d found.\n", targets[i]);
         } else {
             printf("Target data %d not found.\n", targets[i]);
         }
+    }
+
+    /* Add element to end of linked list, then search for it to prove it's there. */
+    int insertionData = 50;
+    insert_end_of_list(&linkedList1, insertionData);
+    printf("Inserted %d into linked list.\n", insertionData);
+    foundTarget = search_linked_list(&linkedList1, insertionData);
+    if (foundTarget != NULL) {
+        printf("Target data %d found in the linked list after inserting.\n", insertionData); 
+    } else {
+        printf("Something went wrong. Target data %d not found after inserting.\n", insertionData);
     }
         
     return 0;
@@ -60,4 +73,16 @@ struct Node* search_linked_list(struct Node *node, int data) {
     } else {
         return search_linked_list(node->next, data);
     }
-} 
+}
+
+void insert_end_of_list(struct Node *node, int data) {
+    if (node->next == NULL) {
+        struct Node* newNode = malloc(sizeof(struct Node));
+        newNode->data = data;
+        newNode->next = NULL;
+        node->next = newNode;
+        return;
+    } else {
+        return insert_end_of_list(node->next, data);
+    }
+}   
